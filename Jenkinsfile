@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Cloning repository...'
-                git branch: 'main', url: 'https://github.com/ihsanabuhanifah/tka_fe'
+                git branch: 'main', url: 'https://github.com/arrow2601/tka_fe'
             }
         }
 
