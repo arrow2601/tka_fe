@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  vite-app:
+    image: node:22
+    container_name: vite-react-app
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+    command: >
+      sh -c "
+        npm install &&
+        (npm run build || echo '⚠️ Build failed but continuing...') &&
+        (npm run dev || tail -f /dev/null)
+      "
+
