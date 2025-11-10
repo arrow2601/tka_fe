@@ -25,7 +25,7 @@ pipeline {
         sh '''
           docker build -t tka_fe_build .
           docker create --name tka_temp tka_fe_build
-          docker cp tka_temp:/app/dist ./app_dist
+          docker cp tka_temp:/usr/src/app/dist ./app_dist
           docker rm tka_temp
         '''
       }
