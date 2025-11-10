@@ -5,8 +5,6 @@ pipeline {
     GIT_REPO = "https://github.com/ihsanabuhanifah/tka_fe"
     DEPLOY_DIR = "/var/www/html/hanafsa_fe"
     PROD_HOST = "hanafsa.web.id"
-    SSH_USER = "username_prod"           // ganti dengan user SSH
-    SSH_PASS = credentials('hanafsa') // Jenkins credentials ID yang berisi password
   }
 
   options {
@@ -33,15 +31,17 @@ pipeline {
       }
     }
 
-    stage('Deploy') {
-      steps {
-        sh '''
-          echo "Deploying dist/ to production server using sshpass..."
-          sshpass -p "${SSH_PASS}" scp -o StrictHostKeyChecking=no -r ./app_dist/* ${SSH_USER}@${PROD_HOST}:${DEPLOY_DIR}/
-        '''
-      }
+    stage('Deploy to Web Server') {
+  steps {
+    echo "🚀 Deploying to 192.168.10.26 (port 26) using SSH username & password..."
+    withCredentials([usernamePassword(credentialsId: 'ssh_ke_web', usernameVariable: 'SSH_USER', passwordVariable: 'SSH_PASS')]) {
+      sh '''
+        # Copy app/dist ke server
+        sshpass -p "$SSH_PASS" scp -o StrictHostKeyChecking=no  -r ./app_dist/* $SSH_USER@hanafsa.web.id:/var/www/html/hanafsa_fe/
+      '''
     }
   }
+}
 
   post {
     success { echo "✅ Deployment successful!" }
